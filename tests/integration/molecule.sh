@@ -20,7 +20,7 @@ if [ -f "$collection_root/test-requirements.txt"  ]; then
 fi
 
 # if current version <= 2.16
-if [ "$(printf '%s\n' "2.16" "$ansible_version" | sort -V | head -n1)" = "$ansible_version" ]; then
+if [ "$(printf '%s\n' "2.16.999.999" "$ansible_version" | sort -V | head -n1)" = "$ansible_version" ]; then
         # community.general dropped support for ansible < 2.16 in version 12:
         # https://github.com/ansible-collections/community.general/pull/10884
         sed -i 's/community.general.git/community.general.git,stable-11/' "$collection_root/requirements.yml"
@@ -31,16 +31,16 @@ if [ "$(printf '%s\n' "2.16" "$ansible_version" | sort -V | head -n1)" = "$ansib
         # https://github.com/ansible/ansible/issues/78539
 fi
 # if current version >= 2.19
-if [ "$(printf '%s\n' "2.19" "$ansible_version" | sort -V | head -n1)" = "2.19" ]; then
+if [ "$(printf '%s\n' "2.19.0.0" "$ansible_version" | sort -V | head -n1)" = "2.19.0.0" ]; then
        python -m pip install molecule molecule-plugins[docker]
        ansible-galaxy collection install git+https://github.com/ansible-collections/community.docker.git
        ansible-galaxy collection install -r "$collection_root/requirements.yml"
 # if current version >= 2.12
-elif [ "$(printf '%s\n' "2.12" "$ansible_version" | sort -V | head -n1)" = "2.12" ]; then
+elif [ "$(printf '%s\n' "2.12.0.0" "$ansible_version" | sort -V | head -n1)" = "2.12.0.0" ]; then
        python -m pip install "molecule<6" molecule-plugins[docker]
        ansible-galaxy collection install git+https://github.com/ansible-collections/community.docker.git
        ansible-galaxy collection install -r "$collection_root/requirements.yml"
-elif [ "$(printf '%s\n' "2.10" "$ansible_version" | sort -V | head -n1)" = "2.10" ]; then
+elif [ "$(printf '%s\n' "2.10.0.0" "$ansible_version" | sort -V | head -n1)" = "2.10.0.0" ]; then
        python -m pip install molecule molecule-docker
        ansible-galaxy collection install git+https://github.com/ansible-collections/community.docker.git,stable-3
        ansible-galaxy collection install -r "$collection_root/requirements.yml"
