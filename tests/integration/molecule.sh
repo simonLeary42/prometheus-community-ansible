@@ -1,5 +1,4 @@
-#!/usr/bin/env bash
-
+set -x
 collection_root=$(pwd | grep -oP ".+\/ansible_collections\/\w+?\/\w+")
 targetname=${PWD##*/}
 role=$(expr "$targetname" : '\w*-\(\w*\)-\w*')
@@ -68,4 +67,4 @@ unset ANSIBLE_PYTHON_INTERPRETER
 
 # Run molecule test
 cd "$role_root" || { echo "Fail to change directory into $role_root"; exit 1; }
-molecule -c "$collection_root/.config/molecule/config.yml" test -s "$scenario"
+molecule -vvv -c "$collection_root/.config/molecule/config.yml" test -s "$scenario"

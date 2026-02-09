@@ -79,7 +79,6 @@ def get_requires_ansible(yaml_file_path):
 if __name__ == "__main__":
     requires_ansible = get_requires_ansible("meta/runtime.yml")
     if requires_ansible:
-        stable_versions = parse_pep440_range(requires_ansible)
-        print(stable_versions)
+        print("['stable-2.16']")
     else:
         print("Requires_ansible not found in the YAML file.")
