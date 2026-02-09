@@ -31,7 +31,7 @@ if [ "$(printf '%s\n' "2.16" "$ansible_version" | sort -V | head -n1)" = "2.16" 
         # https://github.com/ansible/ansible/issues/78539
 fi
 if [ "$(printf '%s\n' "2.12" "$ansible_version" | sort -V | head -n1)" = "2.12" ]; then 
-       python -m pip install "molecule" molecule-plugins[docker]
+       python -m pip install "molecule<6" molecule-plugins[docker]
        ansible-galaxy collection install git+https://github.com/ansible-collections/community.docker.git
        ansible-galaxy collection install -r "$collection_root/requirements.yml"
 elif [ "$(printf '%s\n' "2.10" "$ansible_version" | sort -V | head -n1)" = "2.10" ]; then
