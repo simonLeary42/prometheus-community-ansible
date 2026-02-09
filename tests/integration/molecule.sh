@@ -1,5 +1,4 @@
-#!/usr/bin/env bash
-
+set -x
 collection_root=$(pwd | grep -oP ".+\/ansible_collections\/\w+?\/\w+")
 targetname=${PWD##*/}
 role=$(expr "$targetname" : '\w*-\(\w*\)-\w*')
