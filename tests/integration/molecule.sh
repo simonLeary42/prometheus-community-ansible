@@ -25,7 +25,7 @@ if [ "$(printf '%s\n' "2.16" "$ansible_version" | sort -V | head -n1)" = "2.16" 
         # https://github.com/ansible-collections/community.general/commit/04e720f2e4beff5675dc154bee4343df43d3610a
         # and ansible-galaxy is not smart enough to avoid this:
         # https://github.com/ansible/ansible/issues/78539
-        ansible-galaxy collection install git+https://github.com/ansible-collections/community.general.git,stable-11
+        sed -i 's/community.general.git/community.general.git,stable-11/' "$collection_root/requirements.yml"
 fi
 if [ "$(printf '%s\n' "2.12" "$ansible_version" | sort -V | head -n1)" = "2.12" ]; then 
        python -m pip install "molecule" molecule-plugins[docker]
