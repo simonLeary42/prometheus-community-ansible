@@ -26,6 +26,9 @@ if [ "$(printf '%s\n' "2.16" "$ansible_version" | sort -V | head -n1)" = "2.16" 
         # and ansible-galaxy is not smart enough to avoid this:
         # https://github.com/ansible/ansible/issues/78539
         sed -i 's/community.general.git/community.general.git,stable-11/' "$collection_root/requirements.yml"
+        # community.docker dropped support for ansible < 2.16 in version 5:
+        # https://github.com/ansible-collections/community.docker/blob/main/CHANGELOG.md#removed-features-previously-deprecated
+        sed -i 's/community.docker.git/community.docker.git,stable-4/' "$collection_root/requirements.yml"
 fi
 if [ "$(printf '%s\n' "2.12" "$ansible_version" | sort -V | head -n1)" = "2.12" ]; then 
        python -m pip install "molecule" molecule-plugins[docker]
