@@ -21,6 +21,11 @@ if [ -f "$collection_root/test-requirements.txt"  ]; then
 fi
 
 # Install ansible version specific requirements
+if [ "$(printf '%s\n' "2.16" "$ansible_version" | sort -V | head -n1)" = "2.16" ]; then
+        # community.general dropped support for ansible < 2.16 in version 12
+        # https://github.com/ansible-collections/community.general/commit/04e720f2e4beff5675dc154bee4343df43d3610a
+        ansible-galaxy collection install git+https://github.com/ansible-collections/community.general.git,stable-11
+fi
 if [ "$(printf '%s\n' "2.12" "$ansible_version" | sort -V | head -n1)" = "2.12" ]; then 
        python -m pip install "molecule" molecule-plugins[docker]
        ansible-galaxy collection install git+https://github.com/ansible-collections/community.docker.git
