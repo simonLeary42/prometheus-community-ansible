@@ -22,8 +22,10 @@ fi
 
 # Install ansible version specific requirements
 if [ "$(printf '%s\n' "2.16" "$ansible_version" | sort -V | head -n1)" = "2.16" ]; then
-        # community.general dropped support for ansible < 2.16 in version 12
+        # community.general dropped support for ansible < 2.16 in version 12:
         # https://github.com/ansible-collections/community.general/commit/04e720f2e4beff5675dc154bee4343df43d3610a
+        # and ansible-galaxy is not smart enough to avoid this:
+        # https://github.com/ansible/ansible/issues/78539
         ansible-galaxy collection install git+https://github.com/ansible-collections/community.general.git,stable-11
 fi
 if [ "$(printf '%s\n' "2.12" "$ansible_version" | sort -V | head -n1)" = "2.12" ]; then 
