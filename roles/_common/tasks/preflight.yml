@@ -1,1 +1,13 @@
 ---
+- name: Install dependencies
+  become: true
+  ansible.builtin.package:
+    name: "{{ _common_dependencies }}"
+    state: present
+  when: (_common_dependencies != None)
+  tags:
+    - "{{ ansible_parent_role_names | first | regex_replace(ansible_collection_name ~ '.', '') }}"
+    - configure
+    - "{{ ansible_parent_role_names | first | regex_replace(ansible_collection_name ~ '.', '') }}_configure"
+    - install
+    - "{{ ansible_parent_role_names | first | regex_replace(ansible_collection_name ~ '.', '') }}_install"
