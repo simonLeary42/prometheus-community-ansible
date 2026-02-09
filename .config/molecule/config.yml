@@ -50,6 +50,17 @@ provisioner:
     hosts:
       target_hosts:
         hosts: {}
+    group_vars:
+      all:
+        exclude_ansible_vers:
+          - "2.12"
+          - "2.13"
+          - "2.14"
+          - "2.15"
+          - "2.16"
+          - "2.17"
+          - "2.18"
+          - "2.19"
     host_vars:
       almalinux-8:
         exclude_ansible_vers:
