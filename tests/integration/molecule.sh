@@ -19,11 +19,11 @@ if [ -f "$collection_root/test-requirements.txt"  ]; then
 	python -m pip install --upgrade -r "$collection_root/test-requirements.txt"
 fi
 
-# version <= 2.11
-if [ "$(printf '%s\n' "2.11.999.999" "$ansible_version" | sort -V | head -n1)" = "$ansible_version" ]; then
+# version <= 2.14
+if [ "$(printf '%s\n' "2.14.999.999" "$ansible_version" | sort -V | head -n1)" = "$ansible_version" ]; then
         sed -i 's/community.general.git/community.general.git,stable-11/' "$collection_root/requirements.yml"
         sed -i 's/community.docker.git/community.docker.git,stable-3/' "$collection_root/requirements.yml"
-# 2.11 < version <= 2.16
+# 2.14 < version <= 2.16
 elif [ "$(printf '%s\n' "2.16.999.999" "$ansible_version" | sort -V | head -n1)" = "$ansible_version" ]; then
         sed -i 's/community.general.git/community.general.git,stable-11/' "$collection_root/requirements.yml"
         sed -i 's/community.docker.git/community.docker.git,stable-4/' "$collection_root/requirements.yml"
