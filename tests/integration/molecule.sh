@@ -1,5 +1,4 @@
-#!/usr/bin/env bash
-
+set -x
 collection_root=$(pwd | grep -oP ".+\/ansible_collections\/\w+?\/\w+")
 targetname=${PWD##*/}
 role=$(expr "$targetname" : '\w*-\(\w*\)-\w*')
@@ -20,19 +19,39 @@ if [ -f "$collection_root/test-requirements.txt"  ]; then
 	python -m pip install --upgrade -r "$collection_root/test-requirements.txt"
 fi
 
-# Install ansible version specific requirements
-if [ "$(printf '%s\n' "2.12" "$ansible_version" | sort -V | head -n1)" = "2.12" ]; then 
+# version <= 2.14
+if [ "$(printf '%s\n' "2.14.999.999" "$ansible_version" | sort -V | head -n1)" = "$ansible_version" ]; then
+        sed -i 's/community.general.git/community.general.git,stable-11/' "$collection_root/requirements.yml"
+        sed -i 's/community.docker.git/community.docker.git,stable-3/' "$collection_root/requirements.yml"
+        sed -i 's/ansible.posix.git/ansible.posix.git,stable-1/' "$collection_root/requirements.yml"
+# 2.14 < version <= 2.15
+elif [ "$(printf '%s\n' "2.15.999.999" "$ansible_version" | sort -V | head -n1)" = "$ansible_version" ]; then
+        sed -i 's/community.general.git/community.general.git,stable-11/' "$collection_root/requirements.yml"
+        sed -i 's/community.docker.git/community.docker.git,stable-4/' "$collection_root/requirements.yml"
+        sed -i 's/ansible.posix.git/ansible.posix.git,stable-1/' "$collection_root/requirements.yml"
+# 2.15 < version <= 2.16
+elif [ "$(printf '%s\n' "2.16.999.999" "$ansible_version" | sort -V | head -n1)" = "$ansible_version" ]; then
+        sed -i 's/community.general.git/community.general.git,stable-11/' "$collection_root/requirements.yml"
+        sed -i 's/community.docker.git/community.docker.git,stable-4/' "$collection_root/requirements.yml"
+fi
+
+# 2.19 <= version
+if [ "$(printf '%s\n' "2.19.0.0" "$ansible_version" | sort -V | head -n1)" = "2.19.0.0" ]; then
+       python -m pip install molecule molecule-plugins[docker]
+       ansible-galaxy collection install -r "$collection_root/requirements.yml"
+# 2.12 <= version < 2.19
+elif [ "$(printf '%s\n' "2.12.0.0" "$ansible_version" | sort -V | head -n1)" = "2.12.0.0" ]; then
        python -m pip install "molecule<6" molecule-plugins[docker]
-       ansible-galaxy collection install git+https://github.com/ansible-collections/community.docker.git
        ansible-galaxy collection install -r "$collection_root/requirements.yml"
-elif [ "$(printf '%s\n' "2.10" "$ansible_version" | sort -V | head -n1)" = "2.10" ]; then
+# 2.10 <= version < 2.12
+elif [ "$(printf '%s\n' "2.10.0.0" "$ansible_version" | sort -V | head -n1)" = "2.10.0.0" ]; then
        python -m pip install molecule molecule-docker
-       ansible-galaxy collection install git+https://github.com/ansible-collections/community.docker.git,stable-3
        ansible-galaxy collection install -r "$collection_root/requirements.yml"
+# version < 2.10
 else
        python -m pip install molecule molecule-docker
        req_dir=$(mktemp -d)
-       requirements="$(awk '/name:/ {print $3}' < "$collection_root/requirements.yml") https://github.com/ansible-collections/community.docker.git,stable-3"
+       requirements="$(awk '/name:/ {print $3}' < "$collection_root/requirements.yml")"
        for req in $requirements; do
                if [[ "$req" == *","* ]]; then
                        branch="${req##*,}"
@@ -58,4 +77,4 @@ unset ANSIBLE_PYTHON_INTERPRETER
 
 # Run molecule test
 cd "$role_root" || { echo "Fail to change directory into $role_root"; exit 1; }
-molecule -c "$collection_root/.config/molecule/config.yml" test -s "$scenario"
+molecule -vvv -c "$collection_root/.config/molecule/config.yml" test -s "$scenario"

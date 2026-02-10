@@ -11,30 +11,6 @@ platforms:
     privileged: true
     cgroup_parent: docker.slice
     command: /lib/systemd/systemd
-  - name: almalinux-9
-    image: ghcr.io/test-kitchen/dokken/almalinux-9:sha-f9f79cb
-    pre_build_image: true
-    privileged: true
-    cgroup_parent: docker.slice
-    command: /lib/systemd/systemd
-  - name: debian-11
-    image: ghcr.io/test-kitchen/dokken/debian-11
-    pre_build_image: true
-    privileged: true
-    cgroup_parent: docker.slice
-    command: /lib/systemd/systemd
-  - name: ubuntu-22.04
-    image: ghcr.io/test-kitchen/dokken/ubuntu-22.04
-    pre_build_image: true
-    privileged: true
-    cgroup_parent: docker.slice
-    command: /lib/systemd/systemd
-  - name: ubuntu-24.04
-    image: ghcr.io/test-kitchen/dokken/ubuntu-24.04
-    pre_build_image: true
-    privileged: true
-    cgroup_parent: docker.slice
-    command: /lib/systemd/systemd
 verifier:
   name: testinfra
   additional_files_or_dirs:
@@ -55,3 +31,5 @@ provisioner:
         exclude_ansible_vers:
           - "2.17"
           - "2.18"
+          - "2.19"
+          - "2.20"
