@@ -11,8 +11,12 @@ testinfra_hosts = get_target_hosts()
 
 @pytest.fixture()
 def AnsibleDefaults():
-    with open("../../defaults/main.yml", 'r') as stream:
-        return yaml.full_load(stream)
+    paths = ["./defaults/main.yml", "../../defaults/main.yml"]
+    for path in paths:
+        if os.path.exists(path):
+            with open(path) as stream:
+                return yaml.full_load(stream)
+    raise FileNotFoundError(f"none of these paths {paths} exist! cwd: '{os.getcwd()}'")
 
 
 @pytest.mark.parametrize(
